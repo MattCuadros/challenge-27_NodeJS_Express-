@@ -12,11 +12,13 @@ app.listen(PORT, () => {
   console.log(`Server en puerto: http://localhost:${PORT}`);
 });
 
+/* Mostramos el Archivo HTML en pantalla */
 app.get("/", async (req, res) => {
-  const fsRes = await readFile("index.html", "utf-8");
+  const path = "index.html";
+  const fsRes = await readFile(`${path}`, "utf-8");
   res.send(fsRes);
 });
-
+/* usamos Verbo GET para enviar el JSON */
 app.get("/canciones", async (req, res) => {
   const fsResponse = await readFile("repertoire.json", "utf-8");
   res.send(fsResponse);
@@ -55,7 +57,7 @@ app.post("/canciones", async (req, res) => {
   /* Grabamos el nuevo JSON modificado */
   await writeFile("repertoire.json", JSON.stringify(data));
   /* Respuesta del Server */
-  res.status(201).json({
+  res.status(200).json({
     ok: true,
     msg: "Canción añadida",
     cancion: newSong,
@@ -68,7 +70,7 @@ app.delete("/canciones/:id", async (req, res) => {
   const id = req.params.id;
   const song = data.filter((song) => song.id !== id);
   await writeFile("repertoire.json", JSON.stringify(song));
-  res.status(201).json({
+  res.status(200).json({
     ok: true,
     msg: "Canción eliminada",
     cancion: song,
